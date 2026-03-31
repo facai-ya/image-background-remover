@@ -1,86 +1,31 @@
-# 🎨 Image Background Remover
+# Image Background Remover
 
-AI-powered image background removal tool built with Next.js + Tailwind CSS.
+A simple web app to remove image backgrounds using AI.
 
-## Tech Stack
+## Deploy to Vercel (Recommended)
 
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS
-- **API**: Remove.bg API
-- **Deployment**: Vercel / Cloudflare Pages
+1. Click the button below:
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/facai-ya/image-background-remover)
 
-## Getting Started
+2. Add environment variable:
+   - `REMOVE_BG_API_KEY` = your API key from https://remove.bg/api
 
-### 1. Clone the repository
+## Deploy to Cloudflare Pages
 
-```bash
-git clone https://github.com/facai-ya/image-background-remover.git
-cd image-background-remover
-```
+1. Connect GitHub repository in Cloudflare Dashboard → Pages
+2. Build settings:
+   - Build command: `npm run build`
+   - Build output directory: `.next`
+3. Add environment variable:
+   - `REMOVE_BG_API_KEY` = `8U73faZpDg7PghtR3t9bCdhc`
 
-### 2. Install dependencies
+## Local Development
 
 ```bash
 npm install
-```
-
-### 3. Set up environment variables
-
-Create a `.env.local` file:
-
-```env
-REMOVE_BG_API_KEY=your_remove_bg_api_key
-```
-
-Get your API key from [remove.bg](https://remove.bg).
-
-### 4. Run the development server
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the result.
+## API Key
 
-### 5. Build for production
-
-```bash
-npm run build
-npm start
-```
-
-## Features
-
-- ✅ Drag & drop image upload
-- ✅ Support PNG, JPG, WEBP (max 10MB)
-- ✅ AI background removal via Remove.bg API
-- ✅ Side-by-side comparison
-- ✅ One-click download
-- ✅ Responsive design
-
-## API Endpoints
-
-### POST `/api/remove-bg`
-
-Remove background from an image.
-
-**Request:**
-- Method: `POST`
-- Content-Type: `multipart/form-data`
-- Body: `image` (file)
-
-**Response:**
-- Success: PNG image with transparent background
-- Error: `{ error: string }`
-
-## Cost
-
-| Service | Free Tier | Extra |
-|---------|-----------|-------|
-| Remove.bg | 50/month | $0.05/image |
-| Vercel | 100GB bandwidth | $0.04/GB |
-| Cloudflare Pages | Unlimited | Free |
-
-## License
-
-MIT
+Get your free API key at: https://remove.bg/api
