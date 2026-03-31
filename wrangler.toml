@@ -1,0 +1,9 @@
+name = "image-background-remover"
+compatibility_date = "2024-12-01"
+account_id = "27aa59e3b803a4940abd0c34ae33fefe"
+
+[env.production]
+name = "image-background-remover"
+
+[vars]
+REMOVE_BG_API_KEY = "8U73faZpDg7PghtR3t9bCdhc"
