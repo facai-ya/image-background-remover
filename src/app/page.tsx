@@ -8,13 +8,7 @@ export default function Home() {
   const [result, setResult] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) processFile(file)
-  }
 
   const processFile = (file: File) => {
     if (file.size > 10 * 1024 * 1024) {
@@ -29,10 +23,8 @@ export default function Home() {
     reader.readAsDataURL(file)
   }
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const file = e.dataTransfer.files?.[0]
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
     if (file) processFile(file)
   }
 
@@ -73,214 +65,102 @@ export default function Home() {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute -bottom-20 right-1/3 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+  const styles: Record<string, React.CSSProperties> = {
+    container: { minHeight: '100vh', background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', padding: '20px' },
+    header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', borderRadius: '12px', marginBottom: '40px' },
+    logo: { display: 'flex', alignItems: 'center', gap: '12px' },
+    logoIcon: { width: '40px', height: '40px', background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' },
+    main: { textAlign: 'center', maxWidth: '800px', margin: '0 auto' },
+    h2: { fontSize: '48px', marginBottom: '16px' },
+    p: { fontSize: '18px', opacity: 0.7, marginBottom: '40px' },
+    uploadArea: { border: '2px dashed rgba(255,255,255,0.3)', borderRadius: '24px', padding: '60px', background: 'rgba(255,255,255,0.05)', cursor: 'pointer' },
+    uploadIcon: { width: '80px', height: '80px', background: 'linear-gradient(135deg, #fbbf24, #f59e0b, #ef4444)', borderRadius: '20px', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' },
+    btn: { padding: '12px 32px', background: 'white', color: '#7c3aed', fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '16px', marginTop: '16px' },
+    formats: { display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '24px', fontSize: '14px' },
+    formatTag: { padding: '6px 12px', background: 'rgba(255,255,255,0.1)', borderRadius: '20px' },
+    error: { background: 'rgba(239,68,68,0.2)', padding: '16px', borderRadius: '12px', marginBottom: '20px', color: '#fca5a5' },
+    comparison: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' },
+    imageBox: { background: 'rgba(255,255,255,0.1)', borderRadius: '16px', padding: '16px' },
+    img: { width: '100%', borderRadius: '12px' },
+    actions: { display: 'flex', gap: '12px', justifyContent: 'center' },
+    btnPrimary: { padding: '16px 32px', background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', color: '#000', fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '16px' },
+    btnSuccess: { padding: '16px 32px', background: '#10b981', color: 'white', fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '16px' },
+    btnSecondary: { padding: '16px 32px', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 'bold', borderRadius: '12px', border: '2px solid rgba(255,255,255,0.2)', cursor: 'pointer', fontSize: '16px' },
+    footer: { textAlign: 'center', padding: '24px', opacity: 0.4, fontSize: '14px', marginTop: '40px' }
+  }
 
-      {/* Header */}
-      <header className="relative z-10 backdrop-blur-xl bg-white/10 border-b border-white/20">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xl shadow-lg">
-              ✨
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">Background Remover</h1>
-              <p className="text-xs text-white/60">AI-Powered • Free to use</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-medium">API Ready</span>
+  return (
+    <div style={styles.container}>
+      <header style={styles.header}>
+        <div style={styles.logo}>
+          <div style={styles.logoIcon}>✨</div>
+          <div>
+            <h1 style={{fontSize: '20px', fontWeight: 'bold'}}>Background Remover</h1>
+            <p style={{fontSize: '12px', opacity: 0.6}}>AI-Powered</p>
           </div>
         </div>
+        <span style={styles.formatTag}>API Ready</span>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 max-w-5xl mx-auto px-6 py-12">
+      <main style={styles.main}>
         {!image ? (
-          /* Upload Section */
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-white mb-3">Remove Image Background</h2>
-            <p className="text-white/70 text-lg">Upload your image and let AI do the magic ✨</p>
-          </div>
-        ) : null}
-
-        {/* Upload Area */}
-        {!image && (
-          <div
-            className={`relative overflow-hidden rounded-3xl border-2 border-dashed transition-all duration-300 ${
-              isDragging
-                ? 'border-white bg-white/20 scale-105'
-                : 'border-white/30 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/50'
-            }`}
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-          >
-            <div className="p-16 text-center" onClick={() => fileInputRef.current?.click()}>
-              <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 flex items-center justify-center shadow-2xl transform rotate-3 cursor-pointer">
-                <span className="text-5xl">🎯</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2 cursor-pointer">Drop your image here</h3>
-              <p className="text-white/60 mb-6 cursor-pointer">or click to browse files 👆</p>
-              <button
-                type="button"
-                className="mt-4 px-8 py-3 bg-white text-purple-600 font-bold rounded-xl shadow-lg hover:bg-gray-100 transition-colors cursor-pointer"
-                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click() }}
-              >
-                📁 Select Image File
-              </button>
-              <div className="flex items-center justify-center gap-3 text-sm text-white/50">
-                <span className="px-3 py-1 bg-white/10 rounded-full">PNG</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">JPG</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">WEBP</span>
-                <span className="mx-2">•</span>
+          <>
+            <h2 style={styles.h2}>Remove Image Background</h2>
+            <p style={styles.p}>Upload your image and let AI do the magic</p>
+            <div style={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
+              <div style={styles.uploadIcon}>🎯</div>
+              <h3>Drop your image here</h3>
+              <p>or click to browse</p>
+              <button style={styles.btn}>Select Image File</button>
+              <div style={styles.formats}>
+                <span style={styles.formatTag}>PNG</span>
+                <span style={styles.formatTag}>JPG</span>
+                <span style={styles.formatTag}>WEBP</span>
                 <span>Max 10MB</span>
               </div>
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-          </div>
-        )}
-
-        {/* Editor Section */}
-        {image && (
-          <div className="space-y-6">
-            {/* Header */}
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-2">Edit Your Image</h2>
-              <p className="text-white/60">Compare original and result side by side</p>
-            </div>
-
-            {/* Error */}
-            {error && (
-              <div className="bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-red-200 px-6 py-4 rounded-2xl flex items-center gap-3">
-                <span className="text-2xl">⚠️</span>
-                {error}
+          </>
+        ) : (
+          <>
+            <h2 style={styles.h2}>Edit Your Image</h2>
+            <p style={styles.p}>Compare original and result</p>
+            {error && <div style={styles.error}>{error}</div>}
+            <div style={styles.comparison}>
+              <div style={styles.imageBox}>
+                <h4>📷 Original</h4>
+                <img src={image} alt="Original" style={styles.img} />
               </div>
-            )}
-
-            {/* Image Comparison */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Original */}
-              <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-4 border border-white/20 shadow-2xl">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">📷</span>
-                  <span className="text-white font-medium">Original Image</span>
-                </div>
-                <div className="aspect-square bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIEwgMCAxMCBMIDEwIDEwIEwgMjAgMTAgTCAyMCAwIEwgMTAgMCBMIDEwIDEwIEwgMTAgMjAgTCAwIDIwIEwgMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] bg-repeat rounded-2xl overflow-hidden">
-                  <img src={image} alt="Original" className="w-full h-full object-contain p-4" />
-                </div>
-              </div>
-
-              {/* Result */}
-              <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-4 border border-white/20 shadow-2xl">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">✨</span>
-                  <span className="text-white font-medium">Background Removed</span>
-                </div>
-                <div className="aspect-square bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIEwgMCAxMCBMIDEwIDEwIEwgMjAgMTAgTCAyMCAwIEwgMTAgMCBMIDEwIDEwIEwgMTAgMjAgTCAwIDIwIEwgMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] bg-repeat rounded-2xl overflow-hidden flex items-center justify-center">
-                    {loading ? (
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 animate-spin" />
-                        <p className="text-white/80 font-medium">Processing...</p>
-                        <p className="text-white/50 text-sm mt-1">AI is removing background</p>
-                      </div>
-                    ) : result ? (
-                      <img src={result} alt="Result" className="w-full h-full object-contain p-4" />
-                    ) : (
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-3xl">
-                          ✨
-                        </div>
-                        <p className="text-white/60 text-sm">Click below to remove</p>
-                      </div>
-                    )}
+              <div style={styles.imageBox}>
+                <h4>✨ Result</h4>
+                {loading ? (
+                  <div style={{padding: '40px'}}>
+                    <div style={{width: '40px', height: '40px', border: '3px solid white', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto', animation: 'spin 1s linear infinite'}}></div>
+                    <p style={{marginTop: '10px'}}>Processing...</p>
                   </div>
-                </div>
-              </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {!result && !loading && (
-                <button
-                  onClick={handleRemoveBg}
-                  className="group px-8 py-4 bg-gradient-to-r from-amber-400 to-orange-500 text-gray-900 font-bold rounded-2xl shadow-2xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="text-2xl group-hover:animate-bounce">✨</span>
-                    Remove Background
-                  </span>
-                </button>
-              )}
-              {result && (
-                <button
-                  onClick={handleDownload}
-                  className="group px-8 py-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white font-bold rounded-2xl shadow-2xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="text-2xl">⬇️</span>
-                    Download Result
-                  </span>
-                </button>
-              )}
-              <button
-                onClick={handleReset}
-                className="px-8 py-4 bg-white/10 text-white font-medium rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
-              >
-                <span className="flex items-center gap-2">
-                  <span>🔄</span>
-                  Upload New Image
-                </span>
-              </button>
-            </div>
-
-            {/* Tips */}
-            <div className="mt-8 text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-white/40 text-sm">
-                <span>💡</span>
-                For best results, use images with clear contrast between subject and background
+                ) : result ? (
+                  <img src={result} alt="Result" style={styles.img} />
+                ) : (
+                  <div style={{padding: '40px', opacity: 0.6}}>
+                    <span style={{fontSize: '40px'}}>✨</span>
+                    <p>Click below to remove</p>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Features Section (when no image) */}
-        {!image && (
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-2xl mb-4">🚀</div>
-              <h3 className="text-lg font-bold text-white mb-2">Lightning Fast</h3>
-              <p className="text-white/60 text-sm">Process images in seconds with our AI-powered engine</p>
+            <div style={styles.actions}>
+              {!result && !loading && <button style={styles.btnPrimary} onClick={handleRemoveBg}>✨ Remove Background</button>}
+              {result && <button style={styles.btnSuccess} onClick={handleDownload}>⬇️ Download</button>}
+              <button style={styles.btnSecondary} onClick={handleReset}>🔄 New Image</button>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-2xl mb-4">🎯</div>
-              <h3 className="text-lg font-bold text-white mb-2">Precise Cutout</h3>
-              <p className="text-white/60 text-sm">Accurate edge detection for clean, professional results</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-2xl mb-4">🔒</div>
-              <h3 className="text-lg font-bold text-white mb-2">Privacy Safe</h3>
-              <p className="text-white/60 text-sm">Your images are processed in memory and never stored</p>
-            </div>
-          </div>
+          </>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 text-center py-6 text-white/40 text-sm">
-        <p>Powered by Remove.bg API • Built with Next.js • {new Date().getFullYear()}</p>
+      <footer style={styles.footer}>
+        <p>Powered by Remove.bg API • {new Date().getFullYear()}</p>
       </footer>
+
+      <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp" onChange={handleFileChange} style={{display: 'none'}} />
     </div>
   )
 }
