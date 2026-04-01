@@ -34,16 +34,27 @@ export default function Home() {
     setError(null)
     try {
       const formData = new FormData()
-      formData.append('image', originalFile)
-      const response = await fetch('/api/remove-bg', { method: 'POST', body: formData })
+      formData.append('image_file', originalFile)
+      formData.append('size', 'auto')
+
+      // 直接调用 Remove.bg API
+      const response = await fetch('https://api.remove.bg/v1.0/remove', {
+        method: 'POST',
+        headers: {
+          'X-Api-Key': '8U73faZpDg7PghtR3t9bCdhc',
+        },
+        body: formData,
+      })
+
       if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to process image')
+        const errorText = await response.text()
+        throw new Error(`API Error: ${response.status}`)
       }
+
       const blob = await response.blob()
       setResult(URL.createObjectURL(blob))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      setError(err instanceof Error ? err.message : 'Failed to remove background')
     } finally {
       setLoading(false)
     }
