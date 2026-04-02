@@ -35,20 +35,15 @@ export default function Home() {
     try {
       const formData = new FormData()
       formData.append('image_file', originalFile)
-      formData.append('size', 'auto')
 
-      // 直接调用 Remove.bg API
-      const response = await fetch('https://api.remove.bg/v1.0/remove', {
+      const response = await fetch('/api/remove-bg', {
         method: 'POST',
-        headers: {
-          'X-Api-Key': '8U73faZpDg7PghtR3t9bCdhc',
-        },
         body: formData,
       })
 
       if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`API Error: ${response.status}`)
+        const json = await response.json().catch(() => ({}))
+        throw new Error(json.error || `API Error: ${response.status}`)
       }
 
       const blob = await response.blob()
