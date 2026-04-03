@@ -35,8 +35,17 @@ export default function Home() {
     if (sessionData) setUser(sessionData as any)
 
     const params = new URLSearchParams(window.location.search)
-    if (params.get('error')) {
-      setError('Login failed, please try again')
+    const errCode = params.get('error')
+    if (errCode) {
+      const reason = params.get('reason')
+      const msgMap: Record<string, string> = {
+        no_code: 'Login cancelled',
+        token_failed: `Token exchange failed${reason ? ': ' + reason : ''} — check Cloudflare env vars`,
+        network_error: 'Network error contacting Google',
+        userinfo_failed: 'Failed to get user info from Google',
+        auth_failed: 'Authentication failed',
+      }
+      setError(msgMap[errCode] || `Login failed: ${errCode}`)
       window.history.replaceState({}, '', '/')
     }
   }, [])
