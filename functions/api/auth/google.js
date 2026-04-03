@@ -48,9 +48,10 @@ export async function onRequestGet(context) {
   }
 
   // 尝试存入 D1（如果未绑定则跳过，不影响登录）
-  if (env.DB) {
+  const db = env.DB || env.D8
+  if (db) {
     try {
-      await env.DB.prepare(`
+      await db.prepare(`
         INSERT INTO users (google_id, email, name, avatar, updated_at)
         VALUES (?, ?, ?, ?, datetime('now'))
         ON CONFLICT(google_id) DO UPDATE SET
