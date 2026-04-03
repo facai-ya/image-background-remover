@@ -51,10 +51,12 @@ export default function Home() {
   }, [])
 
   const handleGoogleLogin = () => {
+    console.log('Google login clicked')
     const clientId = '506877532810-ipgrhqfr6iklfmpn4frs6ck6acfj4rh9.apps.googleusercontent.com'
     const redirectUri = `${window.location.origin}/api/auth/google`
     const scope = 'openid email profile'
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`
+    console.log('Redirect URL:', url)
     window.location.href = url
   }
 
