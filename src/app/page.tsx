@@ -50,15 +50,7 @@ export default function Home() {
     }
   }, [])
 
-  const handleGoogleLogin = () => {
-    console.log('Google login clicked')
-    const clientId = '506877532810-ipgrhqfr6iklfmpn4frs6ck6acfj4rh9.apps.googleusercontent.com'
-    const redirectUri = `${window.location.origin}/api/auth/google`
-    const scope = 'openid email profile'
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`
-    console.log('Redirect URL:', url)
-    window.location.href = url
-  }
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=506877532810-ipgrhqfr6iklfmpn4frs6ck6acfj4rh9.apps.googleusercontent.com&redirect_uri=${encodeURIComponent('https://image-backgroundremover.xyz/api/auth/google')}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline`
 
   const handleLogout = () => {
     deleteCookie('session')
@@ -165,10 +157,10 @@ export default function Home() {
             <button style={styles.btnLogout} onClick={handleLogout}>Logout</button>
           </div>
         ) : (
-          <button style={styles.btnGoogle} onClick={handleGoogleLogin}>
+          <a href={googleAuthUrl} style={{...styles.btnGoogle, textDecoration: 'none'}}>
             <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>
             Sign in with Google
-          </button>
+          </a>
         )}
       </header>
 
@@ -183,10 +175,10 @@ export default function Home() {
                 <div style={{fontSize: '48px', marginBottom: '16px'}}>🔐</div>
                 <h3 style={{marginBottom: '12px'}}>Sign in to get started</h3>
                 <p style={{opacity: 0.7, marginBottom: '24px'}}>Login with Google to use the background remover</p>
-                <button style={styles.btnGoogle} onClick={handleGoogleLogin}>
+                <a href={googleAuthUrl} style={{...styles.btnGoogle, textDecoration: 'none'}}>
                   <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>
                   Sign in with Google
-                </button>
+                </a>
               </div>
             ) : (
               <div style={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
