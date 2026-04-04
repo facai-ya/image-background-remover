@@ -15,7 +15,7 @@
 
 # next.js
 /.next/
-/out/
+# /out/ - tracked for Cloudflare Pages
 
 # production
 /build
@@ -41,5 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 # Cloudflare Pages output
-/out/
+# /out/ - tracked for Cloudflare Pages
 
