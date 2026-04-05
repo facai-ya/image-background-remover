@@ -142,6 +142,7 @@ export default function Home() {
       } else {
         setAccount((prev) => prev ? { ...prev, total_used: prev.total_used + 1 } : prev)
       }
+      await fetchUserInfo()
 
       setProgressText('Sending image to background removal service...')
       const formData = new FormData()
@@ -318,6 +319,14 @@ export default function Home() {
                     <p>Click the button below to start</p>
                   </div>
                 )}
+              </div>
+            </div>
+
+            <div style={{ ...styles.panel, marginTop: '18px', padding: '18px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <div style={styles.creditBox}>Remaining credits: {account ? account.credits : '...'}</div>
+                <div style={styles.creditBox}>Total used: {account ? account.total_used : '...'}</div>
+                <div style={styles.creditBox}>Current plan: {account?.plan === 'pro' ? 'PRO' : 'FREE'}</div>
               </div>
             </div>
 
