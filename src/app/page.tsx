@@ -286,15 +286,25 @@ export default function Home() {
                 </a>
               </>
             ) : (
-              <div style={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
-                <div style={styles.uploadIcon}>🎯</div>
-                <h3>Upload your image</h3>
-                <p style={{ opacity: 0.82 }}>PNG / JPG / WEBP · Max 10MB · 1 credit per image</p>
-                <button style={styles.btn}>Select Image</button>
-                <div style={{ marginTop: '18px', opacity: 0.8, fontSize: '14px' }}>
-                  Current credits: <strong>{account ? account.credits : '...'}</strong>
+              <>
+                <div style={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
+                  <div style={styles.uploadIcon}>🎯</div>
+                  <h3>Upload your image</h3>
+                  <p style={{ opacity: 0.82 }}>PNG / JPG / WEBP · Max 10MB · 1 credit per image</p>
+                  <button style={styles.btn}>Select Image</button>
+                  <div style={{ marginTop: '18px', opacity: 0.8, fontSize: '14px' }}>
+                    Current credits: <strong>{account ? account.credits : '...'}</strong>
+                  </div>
                 </div>
-              </div>
+
+                <div style={{ ...styles.panel, marginTop: '18px', padding: '18px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <div style={styles.creditBox}>Remaining credits: {account ? account.credits : '...'}</div>
+                    <div style={styles.creditBox}>Total used: {account ? account.total_used : '...'}</div>
+                    <div style={styles.creditBox}>Current plan: {account?.plan === 'pro' ? 'PRO' : 'FREE'}</div>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         ) : (
