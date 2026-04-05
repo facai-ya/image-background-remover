@@ -2,17 +2,22 @@ export async function onRequestGet(context) {
   const { request, env } = context
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
+  const errorParam = url.searchParams.get('error')
+
+  // 如果 Google 返回了 error 参数
+  if (errorParam) {
+    return htmlPage(`Google 授权错误: ${errorParam}`, 'error', url)
+  }
 
   if (!code) {
-    return Response.redirect(new URL('/?error=no_code', url.origin), 302)
+    return htmlPage('未收到 code 参数', 'no_code', url)
   }
 
   const clientId = env.GOOGLE_CLIENT_ID
   const clientSecret = env.GOOGLE_CLIENT_SECRET
 
   if (!clientId || !clientSecret) {
-    // 环境变量未配置，返回明确错误
-    return Response.redirect(new URL('/?error=token_failed&reason=env_vars_missing', url.origin), 302)
+    return htmlPage(`环境变量未配置 (clientId: ${!!clientId}, clientSecret: ${!!clientSecret})`, 'env_vars_missing', url)
   }
 
   // 用 code 换取 access token
@@ -31,12 +36,12 @@ export async function onRequestGet(context) {
     })
     tokenData = await tokenRes.json()
   } catch (err) {
-    return Response.redirect(new URL('/?error=network_error', url.origin), 302)
+    return htmlPage(`网络错误: ${err.message}`, 'network_error', url)
   }
 
   if (!tokenData.access_token) {
-    const reason = encodeURIComponent(tokenData.error_description || tokenData.error || 'no_token')
-    return Response.redirect(new URL(`/?error=token_failed&reason=${reason}`, url.origin), 302)
+    const reason = tokenData.error_description || tokenData.error || 'no_token'
+    return htmlPage(`Token 获取失败: ${reason}`, 'token_failed', url)
   }
 
   // 获取用户信息
@@ -47,11 +52,11 @@ export async function onRequestGet(context) {
     })
     user = await userRes.json()
   } catch (err) {
-    return Response.redirect(new URL('/?error=userinfo_failed', url.origin), 302)
+    return htmlPage(`获取用户信息失败: ${err.message}`, 'userinfo_failed', url)
   }
 
   if (!user.id) {
-    return Response.redirect(new URL('/?error=auth_failed', url.origin), 302)
+    return htmlPage(`用户信息异常: ${JSON.stringify(user)}`, 'auth_failed', url)
   }
 
   // 尝试存入 D1（如果未绑定则跳过）
@@ -87,5 +92,42 @@ export async function onRequestGet(context) {
       Location: '/',
       'Set-Cookie': `session=${sessionToken}; Path=/; Secure; SameSite=Lax; Max-Age=2592000`,
     },
+  })
+}
+
+function htmlPage(message, errorCode, url) {
+  const html = `<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>登录调试</title>
+  <style>
+    body { font-family: monospace; background: #1a1a2e; color: #eee; padding: 40px; }
+    .box { background: #16213e; border: 1px solid #444; border-radius: 8px; padding: 24px; max-width: 600px; margin: 0 auto; }
+    h2 { color: #f44; margin-top: 0; }
+    .info { color: #aaa; font-size: 13px; margin-top: 16px; word-break: break-all; }
+    a { color: #4af; }
+    .params { background: #0a0a1a; padding: 12px; border-radius: 4px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>⚠️ 登录回调调试信息</h2>
+    <p><strong>错误：</strong>${message}</p>
+    <p><strong>错误码：</strong>${errorCode}</p>
+    <div class="params">
+      <strong>收到的 URL 参数：</strong><br>
+      ${Array.from(url.searchParams.entries()).map(([k,v]) => `${k}: ${v.substring(0, 50)}...`).join('<br>') || '（无参数）'}
+    </div>
+    <div class="info">
+      完整 URL: ${url.toString().substring(0, 200)}<br><br>
+      <a href="/">← 返回首页</a>
+    </div>
+  </div>
+</body>
+</html>`
+  return new Response(html, {
+    status: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
   })
 }
