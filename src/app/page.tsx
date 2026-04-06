@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Link from 'next/link'
 
 interface SessionUser {
   id: string
@@ -237,7 +238,7 @@ export default function Home() {
         </div>
 
         <div style={styles.nav}>
-          <button style={styles.navBtn} onClick={() => setShowPricing((v) => !v)}>Pricing</button>
+          <Link href="/pricing" style={{ ...styles.navBtn, textDecoration: 'none' }}>Pricing</Link>
           <button style={styles.navBtn} onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
         </div>
 
