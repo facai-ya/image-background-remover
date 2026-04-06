@@ -26,40 +26,40 @@ const plans = [
   {
     id: 'pack',
     name: 'Credit Pack',
-    tag: '$1.99',
-    price: '$1.99',
-    sub: '20 credits · never expire',
+    tag: '$4.99',
+    price: '$4.99',
+    sub: '10 credits · never expire',
     highlight: false,
-    badge: 'Coming Soon',
+    badge: 'Best Value',
     features: [
-      '20 credits per pack',
+      '10 credits per pack',
       'Credits never expire',
       'Stack multiple packs',
       'PNG export',
       'Up to 10MB per image',
     ],
-    cta: 'Notify Me',
-    ctaHref: '/',
+    cta: 'Buy Credits',
+    ctaHref: '/checkout?plan=pack',
     ctaStyle: 'outline',
   },
   {
     id: 'pro',
     name: 'Monthly Pro',
-    tag: '$9.9/mo',
-    price: '$9.9',
+    tag: '$19.9/mo',
+    price: '$19.9',
     sub: 'per month · cancel anytime',
     highlight: true,
     badge: 'Most Popular',
     features: [
-      'Unlimited removals per month',
+      '100 removals per month',
       'Priority processing',
       'PNG export',
       'Up to 10MB per image',
       'Cancel anytime',
-      'PayPal · coming soon',
+      'Best for power users',
     ],
-    cta: 'Join Waitlist',
-    ctaHref: '/',
+    cta: 'Subscribe Now',
+    ctaHref: '/checkout?plan=pro',
     ctaStyle: 'primary',
   },
 ]
@@ -74,8 +74,8 @@ const faqs = [
     a: 'No. Your signup credits and any purchased credit packs never expire.',
   },
   {
-    q: 'When will Credit Pack and Pro be available?',
-    a: 'We are integrating PayPal now. Leave your email and we will notify you the moment it launches.',
+    q: 'What is included in the Credit Pack?',
+    a: '10 credits for $4.99. Credits never expire and you can stack multiple packs.',
   },
   {
     q: 'Can I use the tool without signing in?',
@@ -369,12 +369,12 @@ export default function PricingPage() {
             <div style={s.planName}>{plan.tag}</div>
             <div style={s.planPrice}>
               {plan.id === 'pro' && billing === 'yearly'
-                ? '$7.9'
+                ? '$15.9'
                 : plan.price}
             </div>
             <div style={s.planSub}>
               {plan.id === 'pro' && billing === 'yearly'
-                ? 'per month · billed $94.8/yr'
+                ? 'per month · billed $190.8/yr'
                 : plan.sub}
             </div>
             <div style={s.divider} />
