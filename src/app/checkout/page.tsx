@@ -69,7 +69,7 @@ function CheckoutContent() {
     if (loading || !user) return
 
     const intent = plan === 'pack' ? 'capture' : 'subscription'
-    const vault = plan === 'pro' ? '&vault=true&intent=subscription' : ''
+    const vault = plan === 'pro' ? '&vault=true' : ''
     const scriptSrc = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&intent=${intent}${vault}`
 
     // 检查是否已加载
