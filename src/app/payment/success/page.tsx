@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -11,6 +11,36 @@ function SuccessContent() {
   const subID = searchParams.get('subID')
 
   const isPro = plan === 'pro'
+
+  const [activating, setActivating] = useState(isPro)
+  const [activated, setActivated] = useState(false)
+  const [activateError, setActivateError] = useState<string | null>(null)
+  const [proCredits, setProCredits] = useState<number | null>(null)
+
+  // Pro 订阅：自动调后端激活接口
+  useEffect(() => {
+    if (!isPro || !subID) {
+      setActivating(false)
+      return
+    }
+
+    fetch('/api/paypal/activate-subscription', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subscriptionID: subID }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          setProCredits(data.credits)
+          setActivated(true)
+        } else {
+          setActivateError(data.error || 'Activation failed')
+        }
+      })
+      .catch(err => setActivateError(String(err)))
+      .finally(() => setActivating(false))
+  }, [isPro, subID])
 
   const s: Record<string, React.CSSProperties> = {
     page: {
@@ -47,6 +77,15 @@ function SuccessContent() {
       color: '#fde68a',
       fontWeight: 700,
     },
+    error: {
+      background: 'rgba(239,68,68,0.15)',
+      border: '1px solid rgba(239,68,68,0.3)',
+      borderRadius: '10px',
+      padding: '12px 16px',
+      fontSize: '13px',
+      color: '#fca5a5',
+      marginBottom: '24px',
+    },
     btn: {
       display: 'inline-block',
       padding: '14px 32px',
@@ -65,6 +104,24 @@ function SuccessContent() {
       fontSize: '13px',
       textDecoration: 'none',
     },
+    loading: {
+      opacity: 0.7,
+      fontSize: '15px',
+      marginBottom: '24px',
+    },
+  }
+
+  // Pro 订阅激活中
+  if (isPro && activating) {
+    return (
+      <div style={s.page}>
+        <div style={s.card}>
+          <div style={s.icon}>⏳</div>
+          <h1 style={s.title}>Activating your Pro plan...</h1>
+          <p style={s.loading}>Please wait a moment.</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -74,15 +131,23 @@ function SuccessContent() {
         <h1 style={s.title}>Payment Successful!</h1>
         <p style={s.desc}>
           {isPro
-            ? 'Your Monthly Pro subscription is now active. Enjoy unlimited background removals!'
+            ? 'Your Monthly Pro subscription is now active. Enjoy 100 background removals per month!'
             : `Your Credit Pack purchase is complete. 10 credits have been added to your account.`}
         </p>
 
         <div style={s.highlight}>
           {isPro
-            ? '🚀 Monthly Pro · 100 removals/month · Active'
+            ? `🚀 Monthly Pro · Active${proCredits !== null ? ` · ${proCredits} credits` : ''}`
             : `💳 +10 credits added · Total: ${credits || '...'} credits`}
         </div>
+
+        {activateError && (
+          <div style={s.error}>
+            ⚠️ Could not activate Pro automatically: {activateError}
+            <br />
+            <small>Your payment was received. Please contact support if your plan doesn't update.</small>
+          </div>
+        )}
 
         {subID && (
           <p style={{ fontSize: '12px', opacity: 0.5, marginBottom: '20px' }}>
