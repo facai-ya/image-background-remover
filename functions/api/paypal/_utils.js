@@ -1,6 +1,6 @@
 // PayPal 工具函数
 
-const PAYPAL_BASE = 'https://api-m.sandbox.paypal.com' // 沙箱环境，上线改为 https://api-m.paypal.com
+const PAYPAL_BASE = 'https://api-m.paypal.com' // 正式环境
 
 export async function getPayPalToken(env) {
   const clientId = env.PAYPAL_CLIENT_ID
