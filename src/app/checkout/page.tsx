@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-const PAYPAL_CLIENT_ID = 'AXizxirPxv7sBjzonm3rL-xCOoU8-X-5WymmFG4nxeVViGvF1xZzHsug5tS_Zy6tnhVSfEXgcMfeEx3J'
+const PAYPAL_CLIENT_ID = 'AQan-CKrsZmmLuldrF-W5GpWfNyeGoNMwSk4VYc3X6UFUtvP1VHuZ6dmaSDshM-2j1hjcvkolr8-rr5t'
 
 interface SessionUser {
   id: string
