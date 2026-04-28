@@ -23,6 +23,7 @@ export async function onRequestPost(context) {
     const outForm = new FormData()
     outForm.append('image_file', imageFile)
     outForm.append('size', 'auto')
+    outForm.append('format', 'png') // ensure PNG with alpha channel
 
     const response = await fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',

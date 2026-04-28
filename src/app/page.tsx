@@ -217,7 +217,21 @@ export default function Home() {
     btnGoogle: { display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '12px 20px', background: 'white', color: '#333', fontWeight: 700, borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '14px', textDecoration: 'none' },
     grid2: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' },
     imageBox: { background: 'rgba(255,255,255,0.08)', borderRadius: '18px', padding: '16px' },
-    img: { width: '100%', borderRadius: '12px', maxHeight: '480px', objectFit: 'contain', background: 'rgba(255,255,255,0.06)' },
+    img: { width: '100%', borderRadius: '12px', maxHeight: '480px', objectFit: 'contain' },
+    resultImgWrapper: { position: 'relative', borderRadius: '12px', overflow: 'hidden' },
+    checkerBg: {
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: `
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%)
+      `,
+      backgroundSize: '20px 20px',
+      backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+      backgroundColor: '#fff',
+    },
     actions: { display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' },
     pricingGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', marginTop: '18px' },
     card: { background: 'rgba(255,255,255,0.08)', borderRadius: '18px', padding: '22px', textAlign: 'left', border: '1px solid rgba(255,255,255,0.12)' },
@@ -323,7 +337,10 @@ export default function Home() {
                     <p style={{ marginTop: '14px', opacity: 0.9 }}>{progressText || 'Processing...'}</p>
                   </div>
                 ) : result ? (
-                  <img src={result} alt="Result" style={styles.img} />
+                  <div style={styles.resultImgWrapper}>
+                    <div style={styles.checkerBg} />
+                    <img src={result} alt="Result" style={{ ...styles.img, position: 'relative' }} />
+                  </div>
                 ) : (
                   <div style={{ padding: '48px 16px', opacity: 0.7 }}>
                     <div style={{ fontSize: '42px' }}>✨</div>
